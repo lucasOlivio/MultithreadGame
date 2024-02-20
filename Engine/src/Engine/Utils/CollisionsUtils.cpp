@@ -174,7 +174,12 @@ namespace MyEngine
 
 	glm::vec3 CollisionsUtils::SphereSphere_Normal(glm::vec3 centerA, glm::vec3 centerB)
 	{
-		return glm::normalize(centerB - centerA);
+		glm::vec3 normal = glm::normalize(centerB - centerA);
+		if (glm::any(glm::isnan(normal)))
+		{
+			normal = glm::vec3(0.0f);
+		}
+		return normal;
 	}
 
 	glm::vec3 CollisionsUtils::AABB_Normal(glm::vec3 min, glm::vec3 max,

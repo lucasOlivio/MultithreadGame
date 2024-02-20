@@ -13,3 +13,5 @@ Project for game algorithms and gems class. On this project we are supposed to c
 1. Clone the repository.
 2. Open the `Scripts/` directory and run the appropriate `Setup` script to generate projects files.
 3. Open and run the solution.
+
+To test the performance without the threads comment the lines 273 and 299 and then uncomment the lines 274 and 300 in Engine.cpp

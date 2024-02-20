@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "Scene.h"
+
 #include "Engine/ECS/Components.h"
 
 namespace MyEngine
@@ -9,6 +10,9 @@ namespace MyEngine
     {
         m_componentCounter = 0;
         m_pEntityManager = new EntityManager();
+
+        InitializeCriticalSection(&m_CSEntities);
+        InitializeCriticalSection(&m_CSComponents);
     }
 
     Scene::~Scene()
@@ -26,16 +30,23 @@ namespace MyEngine
         {
             delete componentPool.second;
         }
+
+        DeleteCriticalSection(&m_CSEntities);
+        DeleteCriticalSection(&m_CSComponents);
     }
 
     Entity Scene::CreateEntity(bool addDefault)
     {
+        EnterCriticalSection(&m_CSEntities);
+
         Entity entityId = m_pEntityManager->AddEntity(EntityMask());
 
         if (addDefault)
         {
             AddComponent<TransformComponent>(entityId);
         }
+
+        LeaveCriticalSection(&m_CSEntities);
 
         return entityId;
     }
@@ -130,7 +141,7 @@ namespace MyEngine
             }
         }
 
-        return Entity();
+        return newEntityId;
     }
 
     void Scene::EnterEntityCS(Entity entityId)
@@ -150,8 +161,10 @@ namespace MyEngine
 
     void Scene::RemoveEntity(Entity entityId)
     {
-        // TODO: Critical section for vec componentsToDestroy
+        // TODO: Delete entity thread
+        EnterCriticalSection(&m_CSEntities);
         m_entitiesToDestroy.insert(entityId);
+        LeaveCriticalSection(&m_CSEntities);
     }
 
     bool Scene::HasComponents(Entity entityId, const EntityMask& componentMask)
@@ -168,11 +181,14 @@ namespace MyEngine
             return;
         }
 
-        // TODO: Critical section for vec componentsToDestroy
+        EnterCriticalSection(&m_CSComponents);
+
         CompToDestroy comp = CompToDestroy();
         comp.componentType = componentType;
         comp.entityId = entityId;
         m_componentsToDestroy.insert(comp);
+
+        LeaveCriticalSection(&m_CSComponents);
     }
 
     EntityManager* Scene::GetEntitymanager()

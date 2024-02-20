@@ -6,6 +6,7 @@
 #include "Engine/Utils/BiMap.hpp"
 #include "Engine/Utils/Log.h"
 
+#include <Windows.h>
 #include <set>
 
 namespace MyEngine
@@ -44,6 +45,8 @@ namespace MyEngine
         template <typename T>
         T* AddComponent(Entity entityId)
         {
+            EnterCriticalSection(&m_CSComponents);
+
             ComponentType componentType = GetComponentType<T>();
 
             if (m_componentPools.find(componentType) == m_componentPools.end())
@@ -71,6 +74,8 @@ namespace MyEngine
 
             // Add component to the entity mask and return the created component
             m_pEntityManager->SetComponent(entityId, componentType);
+
+            LeaveCriticalSection(&m_CSComponents);
 
             return pComponent;
         }
@@ -143,6 +148,10 @@ namespace MyEngine
         // Using set to avoid setting the same entity/component to be destroied on multithreading
         std::set<Entity> m_entitiesToDestroy;
         std::set<CompToDestroy> m_componentsToDestroy;
+
+        // Multithread support
+        CRITICAL_SECTION m_CSEntities;
+        CRITICAL_SECTION m_CSComponents;
 
         // Really removes and destroy all pending entities and its components
         void m_DestroyEntities();

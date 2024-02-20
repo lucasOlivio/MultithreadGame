@@ -12,7 +12,7 @@ namespace MyEngine
             m_availableEntities.push(entityId);
         }
 
-        m_entitiesCS.reserve(MAX_ENTITIES);
+        m_entitiesCS.resize(MAX_ENTITIES);
     }
 
     Entity EntityManager::AddEntity(EntityMask initialMask)

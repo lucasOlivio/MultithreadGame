@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Core/Threads/EntityThreadPoolLocator.h"
+
 #include "Engine/ECS/Scene/Scene.h"
 #include "Engine/ECS/System/iSystem.h"
 #include "Engine/ECS/Scene/iSceneManager.h"
@@ -46,9 +48,17 @@ namespace MyEngine
 		// Run engine starting simulation state as running or stopped
 		virtual void Run(std::string initialSceneName, bool startSimulation = true);
 
+		bool IsRunning();
+
 		virtual void Update();
 
 		virtual void Render();
+
+		// Goes through all systems updating this entity
+		void UpdateEntity(const Entity& entityId, const float& deltaTime);
+
+		// Render entity using all rendering systems
+		void RenderEntity(const Entity& entityId);
 
 		virtual void Shutdown();
 
@@ -95,20 +105,16 @@ namespace MyEngine
 		iSceneManager* m_pSceneManager;
 		iFrameBufferManager* m_pFrameBufferManager;
 
+		iEntityThreadPool* m_pEntityThreadPool;
+
 		float m_lastTime = 0.0f;
 		std::vector<float> m_frameTimes;
 
 		bool m_isRunning;
 
 		// Multithread support
-		int m_numThreadsUpdate;
-		int m_numThreadsRender;
-
-		// Goes through all systems updating this entity
-		void m_UpdateEntity(const Entity& entityId, const float& deltaTime);
-
-		// Render entity using all rendering systems
-		void m_RenderEntity(const Entity& entityId);
+		LONG m_numThreadsUpdate;
+		LONG m_numThreadsRender;
 
 		// Any major clears needed to be done at end of frame (Ex: scene deleting, entity delete)
 		virtual void m_ClearFrame();

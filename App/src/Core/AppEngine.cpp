@@ -53,7 +53,8 @@ namespace MyEngine
 
 		pStates->mapStateSystems[eGameStates::RUNNING] = {
 			// Physics
-			"MovementSystem"
+			"MovementSystem",
+			"SphereColliderSystem"
 		};
 
 		pStates->mapStateSystems[eGameStates::STOPPED] = {};

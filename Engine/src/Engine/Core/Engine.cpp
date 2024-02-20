@@ -3,6 +3,8 @@
 #include "Engine.h"
 
 #include "Engine/Core/Configs/ConfigSerializerFactory.h"
+#include "Engine/Core/Threads/EntityThreadPool.h"
+#include "Engine/Core/Threads/EntityThreadPoolLocator.h"
 
 #include "Engine/Events/EventBus.hpp"
 #include "Engine/Events/EventBusLocator.hpp"
@@ -29,6 +31,8 @@
 #include "Engine/Graphics/FrameBuffers/FrameBufferManagerLocator.h"
 
 #include "Engine/Utils/InputUtils.h"
+
+#include <process.h>
 
 namespace MyEngine
 {
@@ -101,6 +105,9 @@ namespace MyEngine
 
         m_pFrameBufferManager = new FrameBufferManager();
         FrameBufferManagerLocator::Set(m_pFrameBufferManager);
+
+        m_pEntityThreadPool = new EntityThreadPool();
+        EntityThreadPoolLocator::Set(m_pEntityThreadPool);
     }
 
     Engine::~Engine()
@@ -241,12 +248,19 @@ namespace MyEngine
 
         m_isRunning = true;
 
-        while (m_isRunning)
+        m_pEntityThreadPool->CreateWorkers();
+
+        while (IsRunning())
         {
             Update();
 
             Render();
         }
+    }
+
+    bool Engine::IsRunning()
+    {
+        return m_isRunning;
     }
 
     void Engine::Update()
@@ -256,7 +270,8 @@ namespace MyEngine
         // Systems update by entity
         for (Entity entityId : m_pCurrentScene->GetEntitymanager()->GetEntities())
         {
-            m_UpdateEntity(entityId, deltaTime);
+            m_pEntityThreadPool->EntityUpdate(this, entityId, deltaTime);
+            //UpdateEntity(entityId, deltaTime);
         }
 
         // Wait all entities threads to finish
@@ -281,7 +296,8 @@ namespace MyEngine
         // Systems render by entity
         for (Entity entityId : m_pCurrentScene->GetEntitymanager()->GetEntities())
         {
-            m_RenderEntity(entityId);
+            m_pEntityThreadPool->EntityRender(this, entityId);
+            //RenderEntity(entityId);
         }
 
         // Wait all entities threads to finish
@@ -297,6 +313,38 @@ namespace MyEngine
         }
 
         m_EndFrame();
+    }
+
+    void Engine::UpdateEntity(const Entity& entityId, const float& deltaTime)
+    {
+        InterlockedIncrement(&m_numThreadsUpdate);
+
+        m_pCurrentScene->EnterEntityCS(entityId);
+
+        for (int i = 0; i < m_vecSystems.size(); i++)
+        {
+            m_vecSystems[i]->Update(m_pCurrentScene, entityId, deltaTime);
+        }
+
+        m_pCurrentScene->LeaveEntityCS(entityId);
+
+        InterlockedDecrement(&m_numThreadsUpdate);
+    }
+
+    void Engine::RenderEntity(const Entity& entityId)
+    {
+        InterlockedIncrement(&m_numThreadsRender);
+
+        m_pCurrentScene->EnterEntityCS(entityId);
+
+        for (int i = 0; i < m_vecSystems.size(); i++)
+        {
+            m_vecSystems[i]->Render(m_pCurrentScene, entityId);
+        }
+
+        m_pCurrentScene->LeaveEntityCS(entityId);
+
+        InterlockedDecrement(&m_numThreadsRender);
     }
 
     void Engine::Shutdown()
@@ -394,38 +442,6 @@ namespace MyEngine
     void Engine::OnWindowClose(const WindowCloseEvent& event)
     {
         m_isRunning = false;
-    }
-
-    void Engine::m_UpdateEntity(const Entity& entityId, const float& deltaTime)
-    {
-        m_numThreadsUpdate++;
-
-        m_pCurrentScene->EnterEntityCS(entityId);
-
-        for (int i = 0; i < m_vecSystems.size(); i++)
-        {
-            m_vecSystems[i]->Update(m_pCurrentScene, entityId, deltaTime);
-        }
-
-        m_pCurrentScene->LeaveEntityCS(entityId);
-
-        m_numThreadsUpdate--;
-    }
-
-    void Engine::m_RenderEntity(const Entity& entityId)
-    {
-        m_numThreadsRender++;
-
-        m_pCurrentScene->EnterEntityCS(entityId);
-
-        for (int i = 0; i < m_vecSystems.size(); i++)
-        {
-            m_vecSystems[i]->Render(m_pCurrentScene, entityId);
-        }
-
-        m_pCurrentScene->LeaveEntityCS(entityId);
-
-        m_numThreadsRender--;
     }
 
     void Engine::m_ClearFrame()

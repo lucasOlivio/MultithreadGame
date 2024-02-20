@@ -16,6 +16,7 @@
 #include "Engine/Graphics/FrameBuffers/FrameBufferSystem.h"
 
 #include "Engine/Physics/MovementSystem.h"
+#include "Engine/Physics/SphereColliderSystem.h"
 
 namespace MyEngine
 {
@@ -37,7 +38,8 @@ namespace MyEngine
         {"RenderSystem", []() { return new RenderSystem; }},
         {"FrameBufferSystem", []() { return new FrameBufferSystem; }},
         // Physics systems
-        {"MovementSystem", []() { return new MovementSystem; }}
+        {"MovementSystem", []() { return new MovementSystem; }},
+        {"SphereColliderSystem", []() { return new SphereColliderSystem; }}
     };
 
     void SystemBuilder::RegisterSystem(const std::string& name, SystemFactory factory)
