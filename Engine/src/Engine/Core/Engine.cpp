@@ -25,8 +25,6 @@
 #include "Engine/Graphics/Textures/TextureManagerLocator.h"
 #include "Engine/Graphics/Renderer/RendererManager.h"
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
-#include "Engine/Graphics/Particles/ParticleManager.h"
-#include "Engine/Graphics/Particles/ParticleManagerLocator.h"
 #include "Engine/Graphics/FrameBuffers/FrameBufferManager.h"
 #include "Engine/Graphics/FrameBuffers/FrameBufferManagerLocator.h"
 
@@ -221,9 +219,6 @@ namespace MyEngine
         m_pRendererManager = new RendererManager();
         RendererManagerLocator::Set(m_pRendererManager);
 
-        m_pParticleManager = new ParticleManager();
-        ParticleManagerLocator::Set(m_pParticleManager);
-
         m_pFrameBufferManager = new FrameBufferManager();
         FrameBufferManagerLocator::Set(m_pFrameBufferManager);
 
@@ -272,7 +267,16 @@ namespace MyEngine
     {
         float deltaTime = GetDeltaTime();
 
-        // TODO: Go through all entities and update
+        // Systems update by entity
+        for (Entity entityId : m_pCurrentScene->GetEntitymanager()->GetEntities())
+        {
+            for (int i = 0; i < m_vecSystems.size(); i++)
+            {
+                m_vecSystems[i]->Update(m_pCurrentScene, entityId, deltaTime);
+            }
+        }
+
+        // General Systems updates not related to entity
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
             m_vecSystems[i]->Update(m_pCurrentScene, deltaTime);
@@ -285,7 +289,16 @@ namespace MyEngine
     {
         m_BeginFrame();
 
-        // TODO: Go through all entities and render
+        // Systems render by entity
+        for (Entity entityId : m_pCurrentScene->GetEntitymanager()->GetEntities())
+        {
+            for (int i = 0; i < m_vecSystems.size(); i++)
+            {
+                m_vecSystems[i]->Render(m_pCurrentScene, entityId);
+            }
+        }
+
+        // General Systems rendering not related to entity
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
             m_vecSystems[i]->Render(m_pCurrentScene);
@@ -321,7 +334,6 @@ namespace MyEngine
         delete m_pTextureManager;
         delete m_pRendererManager;
         delete m_pSceneManager;
-        delete m_pParticleManager;
 
         // Delete event bus
         delete m_pEventBusWindow;

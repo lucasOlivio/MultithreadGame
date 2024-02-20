@@ -35,6 +35,10 @@ namespace MyEngine
 	{
 	}
 
+	void ShaderSystem::Render(Scene* pScene, Entity entityId)
+	{
+	}
+
 	void ShaderSystem::End(Scene* pScene)
 	{
 	}

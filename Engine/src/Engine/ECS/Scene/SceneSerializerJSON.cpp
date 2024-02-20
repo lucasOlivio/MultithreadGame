@@ -133,17 +133,7 @@ namespace MyEngine
 
         // Singleton components
         //-------------------------------
-        Value gridObject;
-        gridObject.SetObject();
 
-        Value gridBroadphaseObject;
-        gridBroadphaseObject.SetObject();
-
-        GridBroadphaseComponent* pGridBroadphase = PhysicsLocator::GetGridBroadphase();
-        m_ParseGridBroadphaseToDoc(gridBroadphaseObject, *pGridBroadphase, allocator);
-        gridObject.AddMember("gridBroadphase", gridBroadphaseObject, allocator);
-
-        m_doc.PushBack(gridObject, allocator);
 
         // Entities
         //-------------------------------
@@ -263,15 +253,6 @@ namespace MyEngine
                 m_ParseFrameBufferViewToDoc(framebufferViewObject, *pFrameBufferView, allocator);
                 entityObject.AddMember("framebufferView", framebufferViewObject, allocator);
             }
-            if (pEntityManager->HasComponent(entity, sceneIn.GetComponentType<TransformAnimationComponent>()))
-            {
-                Value transformAnimationObject;
-                transformAnimationObject.SetObject();
-
-                TransformAnimationComponent* pTransformAnimation = sceneIn.Get<TransformAnimationComponent>(entity);
-                m_ParseTransformAnimationToDoc(transformAnimationObject, *pTransformAnimation, allocator);
-                entityObject.AddMember("transformAnimation", transformAnimationObject, allocator);
-            }
             if (pEntityManager->HasComponent(entity, sceneIn.GetComponentType<TilingComponent>()))
             {
                 Value tilingObject;
@@ -280,15 +261,6 @@ namespace MyEngine
                 TilingComponent* pTiling = sceneIn.Get<TilingComponent>(entity);
                 m_ParseTilingToDoc(tilingObject, *pTiling, allocator);
                 entityObject.AddMember("tiling", tilingObject, allocator);
-            }
-            if (pEntityManager->HasComponent(entity, sceneIn.GetComponentType<EmitterComponent>()))
-            {
-                Value emitterObject;
-                emitterObject.SetObject();
-
-                EmitterComponent* pEmitter = sceneIn.Get<EmitterComponent>(entity);
-                m_ParseEmitterToDoc(emitterObject, *pEmitter, allocator);
-                entityObject.AddMember("emitter", emitterObject, allocator);
             }
             if (pEntityManager->HasComponent(entity, sceneIn.GetComponentType<GravityComponent>()))
             {
@@ -543,79 +515,6 @@ namespace MyEngine
         return true;
     }
 
-    bool SceneSerializerJSON::m_ParseTransformAnimationToDoc(rapidjson::Value& jsonObject, TransformAnimationComponent& animationIn, rapidjson::Document::AllocatorType& allocator)
-    {
-        // HACK: This should have a parser, but i dont want to put other properties into the json parser 
-        using namespace rapidjson;
-
-        ParserJSON parser = ParserJSON();
-
-        // Serialize time
-        jsonObject.AddMember("time", animationIn.time, allocator);
-        jsonObject.AddMember("isActive", animationIn.isActive, allocator);
-
-        // Serialize position keyframes
-        Value positionKeyFramesArray(kArrayType);
-        for (const auto& positionKeyFrame : animationIn.positionKeyFrames)
-        {
-            Value positionKeyFrameObject(kObjectType);
-            positionKeyFrameObject.AddMember("time", positionKeyFrame.time, allocator);
-            positionKeyFrameObject.AddMember("easeType", (int)positionKeyFrame.easeType, allocator);
-            positionKeyFrameObject.AddMember("isKeyEvent", positionKeyFrame.isKeyEvent, allocator);
-
-            // Serialize position value
-            Value positionValueArray(kArrayType);
-            positionValueArray.PushBack(positionKeyFrame.value.x, allocator);
-            positionValueArray.PushBack(positionKeyFrame.value.y, allocator);
-            positionValueArray.PushBack(positionKeyFrame.value.z, allocator);
-            positionKeyFrameObject.AddMember("value", positionValueArray, allocator);
-
-            positionKeyFramesArray.PushBack(positionKeyFrameObject, allocator);
-        }
-        jsonObject.AddMember("positionKeyFrames", positionKeyFramesArray, allocator);
-
-        // Serialize scale keyframes
-        Value scaleKeyFramesArray(kArrayType);
-        for (const auto& scaleKeyFrame : animationIn.scaleKeyFrames)
-        {
-            Value scaleKeyFrameObject(kObjectType);
-            scaleKeyFrameObject.AddMember("time", scaleKeyFrame.time, allocator);
-            scaleKeyFrameObject.AddMember("easeType", (int)scaleKeyFrame.easeType, allocator);
-            scaleKeyFrameObject.AddMember("isKeyEvent", scaleKeyFrame.isKeyEvent, allocator);
-
-            // Serialize scale value
-            Value scaleValue(kNumberType);
-            scaleValue = scaleKeyFrame.value;
-            scaleKeyFrameObject.AddMember("value", scaleValue, allocator);
-
-            scaleKeyFramesArray.PushBack(scaleKeyFrameObject, allocator);
-        }
-        jsonObject.AddMember("scaleKeyFrames", scaleKeyFramesArray, allocator);
-
-        // Serialize rotation keyframes
-        Value rotationKeyFramesArray(kArrayType);
-        for (const auto& rotationKeyFrame : animationIn.rotationKeyFrames)
-        {
-            Value rotationKeyFrameObject(kObjectType);
-            rotationKeyFrameObject.AddMember("time", rotationKeyFrame.time, allocator);
-            rotationKeyFrameObject.AddMember("easeType", (int)rotationKeyFrame.easeType, allocator);
-            rotationKeyFrameObject.AddMember("isKeyEvent", rotationKeyFrame.isKeyEvent, allocator);
-
-            // Serialize rotation value
-            Value rotationValueArray(kArrayType);
-            rotationValueArray.PushBack(rotationKeyFrame.value.w, allocator);
-            rotationValueArray.PushBack(rotationKeyFrame.value.x, allocator);
-            rotationValueArray.PushBack(rotationKeyFrame.value.y, allocator);
-            rotationValueArray.PushBack(rotationKeyFrame.value.z, allocator);
-            rotationKeyFrameObject.AddMember("value", rotationValueArray, allocator);
-
-            rotationKeyFramesArray.PushBack(rotationKeyFrameObject, allocator);
-        }
-        jsonObject.AddMember("rotationKeyFrames", rotationKeyFramesArray, allocator);
-
-        return true;
-    }
-
     bool SceneSerializerJSON::m_ParseTilingToDoc(rapidjson::Value& jsonObject, TilingComponent& tilingIn, rapidjson::Document::AllocatorType& allocator)
     {
         using namespace rapidjson;
@@ -624,37 +523,6 @@ namespace MyEngine
 
         parser.SetMember(jsonObject, "axis", tilingIn.axis, allocator);
         parser.SetMember(jsonObject, "offset", tilingIn.offset, allocator);
-
-        return true;
-    }
-
-    bool SceneSerializerJSON::m_ParseEmitterToDoc(rapidjson::Value& jsonObject, EmitterComponent& emitterIn, rapidjson::Document::AllocatorType& allocator)
-    {
-        ParserJSON parser = ParserJSON();
-
-        parser.SetMember(jsonObject, "emitRateMin", emitterIn.emitRateMin, allocator);
-        parser.SetMember(jsonObject, "emitRateMax", emitterIn.emitRateMax, allocator);
-        parser.SetMember(jsonObject, "maxParticles", emitterIn.maxParticles, allocator);
-        parser.SetMember(jsonObject, "isActive", emitterIn.isActive, allocator);
-
-        parser.SetMember(jsonObject, "FBOIDs", emitterIn.properties.FBOIDs, allocator);
-        parser.SetMember(jsonObject, "meshName", emitterIn.properties.meshName, allocator);
-        parser.SetMember(jsonObject, "material", emitterIn.properties.material, allocator);
-        parser.SetMember(jsonObject, "colorInitial", emitterIn.properties.colorInitial, allocator);
-        parser.SetMember(jsonObject, "colorChange", emitterIn.properties.colorChange, allocator);
-        parser.SetMember(jsonObject, "constForce", emitterIn.properties.constForce, allocator);
-        parser.SetMember(jsonObject, "maxLifeTime", emitterIn.properties.maxLifeTime, allocator);
-        parser.SetMember(jsonObject, "minLifeTime", emitterIn.properties.minLifeTime, allocator);
-        parser.SetMember(jsonObject, "oriMax", emitterIn.properties.oriMax, allocator);
-        parser.SetMember(jsonObject, "oriMin", emitterIn.properties.oriMin, allocator);
-        parser.SetMember(jsonObject, "posMax", emitterIn.properties.posMax, allocator);
-        parser.SetMember(jsonObject, "posMin", emitterIn.properties.posMin, allocator);
-        parser.SetMember(jsonObject, "rotMax", emitterIn.properties.rotMax, allocator);
-        parser.SetMember(jsonObject, "rotMin", emitterIn.properties.rotMin, allocator);
-        parser.SetMember(jsonObject, "scaMax", emitterIn.properties.scaMax, allocator);
-        parser.SetMember(jsonObject, "scaMin", emitterIn.properties.scaMin, allocator);
-        parser.SetMember(jsonObject, "velMax", emitterIn.properties.velMax, allocator);
-        parser.SetMember(jsonObject, "velMin", emitterIn.properties.velMin, allocator);
 
         return true;
     }
@@ -729,17 +597,6 @@ namespace MyEngine
         parser.SetMember(jsonObject, "fovy", cameraIn.fovy, allocator);
         parser.SetMember(jsonObject, "zNear", cameraIn.zNear, allocator);
         parser.SetMember(jsonObject, "zFar", cameraIn.zFar, allocator);
-
-        return true;
-    }
-
-    bool SceneSerializerJSON::m_ParseGridBroadphaseToDoc(rapidjson::Value& jsonObject, GridBroadphaseComponent& gridBroadphaseIn, rapidjson::Document::AllocatorType& allocator)
-    {
-        using namespace rapidjson;
-
-        ParserJSON parser = ParserJSON();
-
-        parser.SetMember(jsonObject, "lengthPerBox", gridBroadphaseIn.lengthPerBox, allocator);
 
         return true;
     }
@@ -881,20 +738,10 @@ namespace MyEngine
                     FrameBufferViewComponent* pFrameBufferView = sceneOut.AddComponent<FrameBufferViewComponent>(entityId);
                     m_ParseDocToFrameBufferView(componentObject, *pFrameBufferView);
                 }
-                else if (componentName == "transformAnimation")
-                {
-                    TransformAnimationComponent* pTransformAnimation = sceneOut.AddComponent<TransformAnimationComponent>(entityId);
-                    m_ParseDocToTransformAnimation(componentObject, *pTransformAnimation);
-                }
                 else if (componentName == "tiling")
                 {
                     TilingComponent* pTiling = sceneOut.AddComponent<TilingComponent>(entityId);
                     m_ParseDocToTiling(componentObject, *pTiling);
-                }
-                else if (componentName == "emitter")
-                {
-                    EmitterComponent* pEmitter = sceneOut.AddComponent<EmitterComponent>(entityId);
-                    m_ParseDocToEmitter(componentObject, *pEmitter);
                 }
                 else if (componentName == "gravity")
                 {
@@ -942,11 +789,6 @@ namespace MyEngine
                 {
                     ConfigPathComponent* pConfigPath = CoreLocator::GetConfigPath();
                     m_ParseDocToConfigPath(componentObject, *pConfigPath);
-                }
-                else if (componentName == "gridBroadphase")
-                {
-                    GridBroadphaseComponent* pGridBroadphase = PhysicsLocator::GetGridBroadphase();
-                    m_ParseDocToGridBroadphase(componentObject, *pGridBroadphase);
                 }
             }
         }
@@ -1124,149 +966,12 @@ namespace MyEngine
         return true;
     }
 
-    bool SceneSerializerJSON::m_ParseDocToTransformAnimation(rapidjson::Value& jsonObject, TransformAnimationComponent& animationOut)
-    {
-        // HACK: This should have a parser, but i dont want to put other properties into the json parser 
-        using namespace rapidjson;
-
-        if (!jsonObject["positionKeyFrames"].IsArray())
-        {
-            LOG_ERROR("Expected array of objects for position animation component");
-            return false;
-        }
-
-        if (!jsonObject["scaleKeyFrames"].IsArray())
-        {
-            LOG_ERROR("Expected array of objects for scale animation component");
-            return false;
-        }
-
-        if (!jsonObject["rotationKeyFrames"].IsArray())
-        {
-            LOG_ERROR("Expected array of objects for rotation animation component");
-            return false;
-        }
-
-        ParserJSON parser = ParserJSON();
-
-        for (unsigned int i = 0; i < jsonObject["positionKeyFrames"].Size(); i++)
-        {
-            // Create keyframes
-            PositionKeyFrame keyFrame = PositionKeyFrame();
-
-            Value& positionKeyFrames = jsonObject["positionKeyFrames"][i];
-
-            Value& positionObj = positionKeyFrames["value"];
-            parser.GetValue(positionObj, keyFrame.value);
-
-            Value& timeObj = positionKeyFrames["time"];
-            parser.GetValue(timeObj, keyFrame.time);
-
-            Value& isKeyEventObj = positionKeyFrames["isKeyEvent"];
-            parser.GetValue(isKeyEventObj, keyFrame.isKeyEvent);
-
-            int type = 0;
-            Value& typeObj = positionKeyFrames["easeType"];
-            parser.GetValue(typeObj, type);
-            keyFrame.easeType = (eEasingType)type;
-
-            animationOut.positionKeyFrames.push_back(keyFrame);
-        }
-
-        for (unsigned int i = 0; i < jsonObject["rotationKeyFrames"].Size(); i++)
-        {
-            // Create keyframes
-            RotationKeyFrame keyFrame = RotationKeyFrame();
-
-            Value& rotationKeyFrames = jsonObject["rotationKeyFrames"][i];
-
-            Value& rotationObj = rotationKeyFrames["value"];
-            parser.GetValue(rotationObj, keyFrame.value);
-
-            Value& timeObj = rotationKeyFrames["time"];
-            parser.GetValue(timeObj, keyFrame.time);
-
-            Value& isKeyEventObj = rotationKeyFrames["isKeyEvent"];
-            parser.GetValue(isKeyEventObj, keyFrame.isKeyEvent);
-
-            int type = 0;
-            Value& typeObj = rotationKeyFrames["easeType"];
-            parser.GetValue(typeObj, type);
-            keyFrame.easeType = (eEasingType)type;
-
-            animationOut.rotationKeyFrames.push_back(keyFrame);
-        }
-
-        for (unsigned int i = 0; i < jsonObject["scaleKeyFrames"].Size(); i++)
-        {
-            // Create keyframes
-            ScaleKeyFrame keyFrame = ScaleKeyFrame();
-
-            Value& scaleKeyFrames = jsonObject["scaleKeyFrames"][i];
-
-            Value& scaleObj = scaleKeyFrames["value"];
-            parser.GetValue(scaleObj, keyFrame.value);
-
-            Value& timeObj = scaleKeyFrames["time"];
-            parser.GetValue(timeObj, keyFrame.time);
-
-            Value& isKeyEventObj = scaleKeyFrames["isKeyEvent"];
-            parser.GetValue(isKeyEventObj, keyFrame.isKeyEvent);
-
-            int type = 0;
-            Value& typeObj = scaleKeyFrames["easeType"];
-            parser.GetValue(typeObj, type);
-            keyFrame.easeType = (eEasingType)type;
-
-            animationOut.scaleKeyFrames.push_back(keyFrame);
-        }
-
-        if (jsonObject.HasMember("isActive"))
-        {
-            Value& activeObj = jsonObject["isActive"];
-            parser.GetValue(activeObj, animationOut.isActive);
-        }
-
-        return true;
-    }
-
     bool SceneSerializerJSON::m_ParseDocToTiling(rapidjson::Value& jsonObject, TilingComponent& tilingOut)
     {
         ParserJSON parser = ParserJSON();
 
         parser.GetValue(jsonObject["axis"], tilingOut.axis);
         parser.GetValue(jsonObject["offset"], tilingOut.offset);
-
-        return true;
-    }
-
-    bool SceneSerializerJSON::m_ParseDocToEmitter(rapidjson::Value& jsonObject, EmitterComponent& emitterOut)
-    {
-        ParserJSON parser = ParserJSON();
-
-        parser.GetValue(jsonObject["emitRateMin"], emitterOut.emitRateMin);
-        parser.GetValue(jsonObject["emitRateMax"], emitterOut.emitRateMax);
-        parser.GetValue(jsonObject["maxParticles"], emitterOut.maxParticles);
-        parser.GetValue(jsonObject["isActive"], emitterOut.isActive);
-
-        parser.GetValue(jsonObject["FBOIDs"], emitterOut.properties.FBOIDs);
-        parser.GetValue(jsonObject["meshName"], emitterOut.properties.meshName);
-        parser.GetValue(jsonObject["material"], emitterOut.properties.material);
-        parser.GetValue(jsonObject["colorInitial"], emitterOut.properties.colorInitial);
-        parser.GetValue(jsonObject["colorChange"], emitterOut.properties.colorChange);
-        parser.GetValue(jsonObject["constForce"], emitterOut.properties.constForce);
-        parser.GetValue(jsonObject["maxLifeTime"], emitterOut.properties.maxLifeTime);
-        parser.GetValue(jsonObject["minLifeTime"], emitterOut.properties.minLifeTime);
-        parser.GetValue(jsonObject["oriMax"], emitterOut.properties.oriMax);
-        parser.GetValue(jsonObject["oriMin"], emitterOut.properties.oriMin);
-        parser.GetValue(jsonObject["posMax"], emitterOut.properties.posMax);
-        parser.GetValue(jsonObject["posMin"], emitterOut.properties.posMin);
-        parser.GetValue(jsonObject["rotMax"], emitterOut.properties.rotMax);
-        parser.GetValue(jsonObject["rotMin"], emitterOut.properties.rotMin);
-        parser.GetValue(jsonObject["scaMax"], emitterOut.properties.scaMax);
-        parser.GetValue(jsonObject["scaMin"], emitterOut.properties.scaMin);
-        parser.GetValue(jsonObject["velMax"], emitterOut.properties.velMax);
-        parser.GetValue(jsonObject["velMin"], emitterOut.properties.velMin);
 
         return true;
     }
@@ -1359,15 +1064,6 @@ namespace MyEngine
 
         parser.GetValue(jsonObject["pathDebugSquare"], configPathOut.pathDebugSquare);
         parser.GetValue(jsonObject["pathDebugSphere"], configPathOut.pathDebugSphere);
-
-        return true;
-    }
-
-    bool SceneSerializerJSON::m_ParseDocToGridBroadphase(rapidjson::Value& jsonObject, GridBroadphaseComponent& gridBroadphaseOut)
-    {
-        ParserJSON parser = ParserJSON();
-
-        parser.GetValue(jsonObject["lengthPerBox"], gridBroadphaseOut.lengthPerBox);
 
         return true;
     }

@@ -2,8 +2,6 @@
 
 #include "Event.hpp"
 
-#include "Engine/Graphics/Animations/AnimationProperties.h"
-
 namespace MyEngine
 {
 	enum eAnimationEvents

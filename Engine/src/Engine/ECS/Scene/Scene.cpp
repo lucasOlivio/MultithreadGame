@@ -98,11 +98,6 @@ namespace MyEngine
                 ModelComponent* pModel = AddComponent<ModelComponent>(newEntityId);
                 *pModel = *(Get<ModelComponent>(entityId));
             }
-            else if (componentType == GetComponentType<TransformAnimationComponent>())
-            {
-                TransformAnimationComponent* pTransformAnimation = AddComponent<TransformAnimationComponent>(newEntityId);
-                *pTransformAnimation = *(Get<TransformAnimationComponent>(entityId));
-            }
             else if (componentType == GetComponentType<TilingComponent>())
             {
                 TilingComponent* pTiling = AddComponent<TilingComponent>(newEntityId);

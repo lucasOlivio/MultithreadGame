@@ -37,6 +37,10 @@ namespace MyEngine
 	{
 	}
 
+	void StateSystem::Render(Scene* pScene, Entity entityId)
+	{
+	}
+
 	void StateSystem::End(Scene* pScene)
 	{
 	}

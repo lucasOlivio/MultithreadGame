@@ -58,14 +58,8 @@ namespace MyEngine
 		bool m_ParseFrameBufferViewToDoc(rapidjson::Value& jsonObject, 
 								  FrameBufferViewComponent& framebufferViewIn,
 								  rapidjson::Document::AllocatorType& allocator);
-		bool m_ParseTransformAnimationToDoc(rapidjson::Value& jsonObject, 
-											TransformAnimationComponent& animationIn,
-											rapidjson::Document::AllocatorType& allocator);
 		bool m_ParseTilingToDoc(rapidjson::Value& jsonObject, 
 								  TilingComponent& tilingIn,
-								  rapidjson::Document::AllocatorType& allocator);
-		bool m_ParseEmitterToDoc(rapidjson::Value& jsonObject, 
-								  EmitterComponent& emitterIn,
 								  rapidjson::Document::AllocatorType& allocator);
 		bool m_ParseGravityToDoc(rapidjson::Value& jsonObject, 
 								  GravityComponent& gravityIn,
@@ -84,9 +78,6 @@ namespace MyEngine
 								  rapidjson::Document::AllocatorType& allocator);
 		bool m_ParseCameraToDoc(rapidjson::Value& jsonObject, 
 								  CameraComponent& cameraIn,
-								  rapidjson::Document::AllocatorType& allocator);
-		bool m_ParseGridBroadphaseToDoc(rapidjson::Value& jsonObject,
-								  GridBroadphaseComponent& gridBroadphaseIn,
 								  rapidjson::Document::AllocatorType& allocator);
 		bool m_ParseSoftBodyToDoc(rapidjson::Value& jsonObject,
 								  SoftBodyComponent& softBodyIn,
@@ -122,12 +113,8 @@ namespace MyEngine
 							   FrameBufferComponent& framebufferOut);
 		bool m_ParseDocToFrameBufferView(rapidjson::Value& jsonObject, 
 							   FrameBufferViewComponent& framebufferViewOut);
-		bool m_ParseDocToTransformAnimation(rapidjson::Value& jsonObject, 
-							   TransformAnimationComponent& animationOut);
 		bool m_ParseDocToTiling(rapidjson::Value& jsonObject, 
 							   TilingComponent& tilingOut);
-		bool m_ParseDocToEmitter(rapidjson::Value& jsonObject, 
-							   EmitterComponent& emitterOut);
 		bool m_ParseDocToGravity(rapidjson::Value& jsonObject, 
 							   GravityComponent& gravityOut);
 		bool m_ParseDocToRigidBody(rapidjson::Value& jsonObject, 
@@ -144,8 +131,6 @@ namespace MyEngine
 							   WindowComponent& windowOut);
 		bool m_ParseDocToConfigPath(rapidjson::Value& jsonObject, 
 							   ConfigPathComponent& configPathOut);
-		bool m_ParseDocToGridBroadphase(rapidjson::Value& jsonObject,
-							   GridBroadphaseComponent& gridBroadphaseOut);
 		bool m_ParseDocToSoftBody(rapidjson::Value& jsonObject,
 							   SoftBodyComponent& softBodyOut);
 		bool m_ParseDocToPlayer(rapidjson::Value& jsonObject,

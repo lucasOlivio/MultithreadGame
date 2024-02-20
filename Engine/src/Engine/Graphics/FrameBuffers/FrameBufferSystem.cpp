@@ -42,6 +42,10 @@ namespace MyEngine
 	{
 	}
 
+	void FrameBufferSystem::Render(Scene* pScene, Entity entityId)
+	{
+	}
+
 	void FrameBufferSystem::End(Scene* pScene)
 	{
 		iFrameBufferManager* pFrameBufferManager = FrameBufferManagerLocator::Get();

@@ -10,7 +10,6 @@
 #include "Engine/Graphics/Textures/TextureProperties.h"
 #include "Engine/Graphics/GraphicsProperties.h"
 
-#include "Engine/Physics/BroadPhase/GridAABB.h"
 #include "Engine/Physics/PhysicsProperties.h"
 
 #include "Engine/Utils/TransformUtils.h"
@@ -65,15 +64,6 @@ namespace MyEngine
 		int frameCount;
 		float fpsTimer;
 		float fps;
-	};
-
-	struct GridBroadphaseComponent
-	{
-		// Mapping of AABBs to their indices in the grid
-		std::map< uint /*index*/, GridAABB* > mapAABBs;
-
-		// Length per grid box in the grid
-		glm::vec3 lengthPerBox;
 	};
 
 	// Generic grouping for any narrow phase testing 

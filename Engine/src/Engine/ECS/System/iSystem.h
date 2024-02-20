@@ -28,6 +28,9 @@ namespace MyEngine
 		// Any rendering in the window
 		virtual void Render(Scene* pScene) = 0;
 
+		// Execute rendering for this entity
+		virtual void Render(Scene* pScene, Entity entityId) = 0;
+
 		// Finished this specific scene simulation, not necessarily end of app
 		virtual void End(Scene* pScene) = 0;
 

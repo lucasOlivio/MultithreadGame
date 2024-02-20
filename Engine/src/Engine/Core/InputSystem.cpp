@@ -44,6 +44,10 @@ namespace MyEngine
 	{
 	}
 
+	void InputSystem::Render(Scene* pScene, Entity entityId)
+	{
+	}
+
 	void InputSystem::End(Scene* pScene)
 	{
 	}

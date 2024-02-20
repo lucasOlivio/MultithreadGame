@@ -17,7 +17,6 @@
 #include "Engine/Graphics/Shaders/iShaderManager.h"
 #include "Engine/Graphics/Materials/iMaterialManager.h"
 #include "Engine/Graphics/Textures/iTextureManager.h"
-#include "Engine/Graphics/Particles/iParticleManager.h"
 #include "Engine/Graphics/FrameBuffers/iFrameBufferManager.h"
 
 #include <map>
@@ -101,7 +100,6 @@ namespace MyEngine
 		iTextureManager* m_pTextureManager;
 		iRendererManager* m_pRendererManager;
 		iSceneManager* m_pSceneManager;
-		iParticleManager* m_pParticleManager;
 		iFrameBufferManager* m_pFrameBufferManager;
 
 		float m_lastTime = 0.0f;

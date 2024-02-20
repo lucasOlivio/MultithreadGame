@@ -84,6 +84,10 @@ namespace MyEngine
         pWindow->prevName = pWindow->name;
     }
 
+    void WindowSystem::Render(Scene* pScene, Entity entityId)
+    {
+    }
+
     void WindowSystem::End(Scene* pScene)
     {
     }

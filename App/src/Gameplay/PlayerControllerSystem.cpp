@@ -74,7 +74,7 @@ namespace MyEngine
 
     void PlayerControllerSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
     {
-        EntityMask mask = SceneView<TransformComponent>::GetMask(*pScene);
+        EntityMask mask = SceneView<PlayerComponent, TransformComponent, MovementComponent>::GetMask(*pScene);
 
         if (!pScene->HasComponents(entityId, mask))
         {
@@ -117,6 +117,10 @@ namespace MyEngine
 	{
 	}
 
+    void PlayerControllerSystem::Render(Scene* pScene, Entity entityId)
+    {
+    }
+
 	void PlayerControllerSystem::End(Scene* pScene)
 	{
 	}
@@ -150,7 +154,11 @@ namespace MyEngine
 
             std::vector<glm::vec3> directions = {
                 glm::vec3(0.0f, 2.0f, 2.0f),    // top
+                glm::vec3(2.0f, 2.0f, 2.0f),    // top-right
+                glm::vec3(-2.0f, 2.0f, 2.0f),   // top-left
                 glm::vec3(0.0f, -2.0f, 2.0f),   // down
+                glm::vec3(2.0f, -2.0f, 2.0f),   // down-right
+                glm::vec3(-2.0f, -2.0f, 2.0f),  // down-left
                 glm::vec3(2.0f, 0.0f, 2.0f),    // Right
                 glm::vec3(-2.0f, 0.0f, 2.0f),   // Left
             };

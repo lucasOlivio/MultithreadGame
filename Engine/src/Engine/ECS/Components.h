@@ -4,8 +4,6 @@
 
 #include "Engine/Graphics/Textures/TextureProperties.h"
 #include "Engine/Graphics/GraphicsProperties.h"
-#include "Engine/Graphics/Animations/AnimationProperties.h"
-#include "Engine/Graphics/Particles/ParticlesProperties.h"
 
 #include "Engine/Physics/PhysicsProperties.h"
 
@@ -166,46 +164,6 @@ namespace MyEngine
 	{
 		glm::vec3 axis;
 		glm::vec3 offset;
-	};
-
-	struct TransformAnimationComponent
-	{
-		std::vector<PositionKeyFrame> positionKeyFrames;
-		std::vector<ScaleKeyFrame> scaleKeyFrames;
-		std::vector<RotationKeyFrame> rotationKeyFrames;
-
-		int currStartPosKF = -1;
-		int currEndPosKF = -1;
-
-		int currStartRotKF = -1;
-		int currEndRotKF = -1;
-
-		int currStartScaKF = -1;
-		int currEndScaKF = -1;
-
-		float time;
-		bool isActive;
-	};
-
-	struct EmitterComponent
-	{
-		EmitterProps properties = EmitterProps();
-
-		// Time since active
-		float timer;
-		float timeLastEmit;
-
-		// Number of particles emitted per second
-		int emitRateMin;
-		int emitRateMax;
-		int maxParticles;
-
-		// Total number of particles emitted
-		int totalEmitPart = 0;
-
-		sMesh* pMesh;
-
-		bool isActive = false;
 	};
 
 	struct FrameBufferComponent

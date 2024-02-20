@@ -132,6 +132,10 @@ namespace MyEngine
 		pRenderer->ClearRender();
     }
 
+	void RenderSystem::Render(Scene* pScene, Entity entityId)
+	{
+	}
+
     void RenderSystem::End(Scene* pScene)
     {
     }

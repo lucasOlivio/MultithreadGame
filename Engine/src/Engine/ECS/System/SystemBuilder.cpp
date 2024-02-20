@@ -11,31 +11,11 @@
 #include "Engine/Graphics/WindowSystem.h"
 #include "Engine/Graphics/ModelRenderSystem.h"
 #include "Engine/Graphics/Renderer/RenderSystem.h"
-#include "Engine/Graphics/Animations/AnimationSystem.h"
-#include "Engine/Graphics/Animations/AnimationPlayerSystem.h"
-#include "Engine/Graphics/Lights/LightSystem.h"
 #include "Engine/Graphics/Shaders/ShaderSystem.h"
-#include "Engine/Graphics/Particles/ParticleEmissionSystem.h"
-#include "Engine/Graphics/Particles/ParticleUpdaterSystem.h"
-#include "Engine/Graphics/Particles/ParticleRenderSystem.h"
 #include "Engine/Graphics/UI/BaseUISystem.h"
 #include "Engine/Graphics/FrameBuffers/FrameBufferSystem.h"
 
 #include "Engine/Physics/MovementSystem.h"
-#include "Engine/Physics/RotationSystem.h"
-#include "Engine/Physics/GravitySystem.h"
-#include "Engine/Physics/BroadPhase/GridBroadPhaseSystem.h"
-#include "Engine/Physics/NarrowPhase/CollisionSystem.h"
-#include "Engine/Physics/SoftBody/SotBodyConstraintsSystem.h"
-#include "Engine/Physics/SoftBody/SoftBodyUpdateSystem.h"
-#include "Engine/Physics/SoftBody/SoftBodyResponseSystem.h"
-
-#include "Engine/Gameplay/SteeringBehaviorSystem.h"
-
-#include "Engine/Debug/DebugSystem.h"
-#include "Engine/Debug/DrawGridSystem.h"
-#include "Engine/Debug/DrawCollisionSystem.h"
-#include "Engine/Debug/DrawSoftBodyPartclesSystem.h"
 
 namespace MyEngine
 {

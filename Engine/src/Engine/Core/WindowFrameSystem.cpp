@@ -54,6 +54,10 @@ namespace MyEngine
 	{
 	}
 
+	void WindowFrameSystem::Render(Scene* pScene, Entity entityId)
+	{
+	}
+
 	void WindowFrameSystem::End(Scene* pScene)
 	{
 	}

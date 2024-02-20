@@ -22,6 +22,8 @@ namespace MyEngine
 
 		virtual void Render(Scene* pScene);
 
+		virtual void Render(Scene* pScene, Entity entityId);
+
 		virtual void End(Scene* pScene);
 
 		virtual void Shutdown();

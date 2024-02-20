@@ -49,6 +49,10 @@ namespace MyEngine
     {
     }
 
+    void BaseUISystem::Render(Scene* pScene, Entity entityId)
+    {
+    }
+
     void BaseUISystem::End(Scene* pScene)
     {
     }

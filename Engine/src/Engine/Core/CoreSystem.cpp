@@ -49,6 +49,10 @@ namespace MyEngine
     {
     }
 
+    void CoreSystem::Render(Scene* pScene, Entity entityId)
+    {
+    }
+
     void CoreSystem::End(Scene* pScene)
     {
     }
