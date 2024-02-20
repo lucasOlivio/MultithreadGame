@@ -27,6 +27,10 @@ namespace MyEngine
     {
     }
 
+    void DebugSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void DebugSystem::Render(Scene* pScene)
     {
     }

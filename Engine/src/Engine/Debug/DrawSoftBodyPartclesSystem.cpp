@@ -25,6 +25,10 @@ namespace MyEngine
     {
     }
 
+    void DrawSoftBodyPartclesSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void DrawSoftBodyPartclesSystem::Render(Scene* pScene)
     {
         iRendererManager* pRendererManager = RendererManagerLocator::Get();

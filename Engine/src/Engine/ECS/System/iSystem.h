@@ -19,8 +19,11 @@ namespace MyEngine
 		// Any initialization the system needs with the scene loaded
 		virtual void Start(Scene* pScene) = 0;
 
-		// Simulation per frame
+		// Simulations per frame
 		virtual void Update(Scene* pScene, float deltaTime) = 0;
+
+		// Simulation per frame per entity
+		virtual void Update(Scene* pScene, Entity entityId, float deltaTime) = 0;
 
 		// Any rendering in the window
 		virtual void Render(Scene* pScene) = 0;

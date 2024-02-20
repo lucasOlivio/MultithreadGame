@@ -24,6 +24,10 @@ namespace MyEngine
     {
     }
 
+    void ModelRenderSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void ModelRenderSystem::Render(Scene* pScene)
     {
         iRendererManager* pRendererManager = RendererManagerLocator::Get();

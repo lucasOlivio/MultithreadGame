@@ -74,8 +74,18 @@ namespace MyEngine
                     LOG_WARNING("Unknown shape for entity " + std::to_string(entityId));
                     continue;
                 }
+
+                // HACK: Just to avoid anything from falling
+                if (pTransform->position.y < 0.0f)
+                {
+                    pTransform->position.y = 0.0f;
+                }
             }
         }
+    }
+
+    void CollisionSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
     }
 
     void CollisionSystem::Render(Scene* pScene)

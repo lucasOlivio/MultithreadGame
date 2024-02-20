@@ -16,19 +16,19 @@ namespace MyEngine
 
 		virtual void DestroyVBO(std::string modelName);
 
-		virtual sMesh* LoadModelIntoVAO(std::string& fileName, bool bIsDynamicBuffer,
+		virtual sMesh* LoadModelIntoVAO(const std::string& fileName, bool bIsDynamicBuffer,
 										bool hasNormals, bool hasTexture);
 		
 		// Normals and texture as default
-		virtual sMesh* LoadModelIntoVAO(std::string& fileName, bool bIsDynamicBuffer);
+		virtual sMesh* LoadModelIntoVAO(const std::string& fileName, bool bIsDynamicBuffer);
 
 		// Load mesh and duplicates it with custom name
-		virtual sMesh* LoadModelCopyIntoVAO(std::string& fileName, bool bIsDynamicBuffer,
+		virtual sMesh* LoadModelCopyIntoVAO(const std::string& fileName, bool bIsDynamicBuffer,
 											bool hasNormals, bool hasTexture, std::string& copyName);
 
-		virtual bool UpdateVAOBuffers(std::string& fileName, sMesh* pUpdatedMesh);
+		virtual bool UpdateVAOBuffers(const std::string& fileName, sMesh* pUpdatedMesh);
 
-		virtual sMesh* FindMeshByModelName(std::string& filename);
+		virtual sMesh* FindMeshByModelName(const std::string& filename);
 
 		virtual void SetBasePath(std::string basePath);
 	private:

@@ -41,8 +41,6 @@ namespace MyEngine
 		pStates->mainSystems.push_back("ShaderSystem");
 		pStates->mainSystems.push_back("ModelRenderSystem");
 		pStates->mainSystems.push_back("RenderSystem");
-		pStates->mainSystems.push_back("LightSystem");
-		pStates->mainSystems.push_back("AnimationSystem");
 
 		// Gameplayer
 		pStates->mainSystems.push_back("PlayerControllerSystem");
@@ -54,39 +52,11 @@ namespace MyEngine
 		pStates->mapStateSystems[eGameStates::STARTED] = {};
 
 		pStates->mapStateSystems[eGameStates::RUNNING] = {
-			// Graphics
-			"AnimationPlayerSystem",
 			// Physics
-			"MovementSystem",
-			"RotationSystem",
-			"GravitySystem",
-			"GridBroadPhaseSystem",
-			"CollisionSystem",
-			"SoftBodyUpdateSystem",
-			"SoftBodyResponseSystem",
-			"SotBodyConstraintsSystem",
-			// Gameplay
-			//"PlayerControllerSystem",
-			"SteeringBehaviorSystem"
-
-			// Debug
-			,"DebugSystem",
-			"DrawGridSystem",
-			"DrawCollisionSystem",
-			"DrawSoftBodyPartclesSystem"
-
+			"MovementSystem"
 		};
 
-		pStates->mapStateSystems[eGameStates::STOPPED] = {
-			// Physics
-			"GridBroadPhaseSystem"
-			#ifdef DEBUG
-			// Debug
-			,"DebugSystem",
-			"DrawGridSystem",
-			"DrawCollisionSystem"
-			#endif
-		};
+		pStates->mapStateSystems[eGameStates::STOPPED] = {};
 
 		pStates->mapStateSystems[eGameStates::GAMEOVER] = {};
 	}

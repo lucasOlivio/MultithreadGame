@@ -27,6 +27,10 @@ namespace MyEngine
 	{
 	}
 
+	void ShaderSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+	{
+	}
+
 	void ShaderSystem::Render(Scene* pScene)
 	{
 	}

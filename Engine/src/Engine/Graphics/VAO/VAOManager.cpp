@@ -35,7 +35,7 @@ namespace MyEngine
         return;
     }
 
-    sMesh* VAOManager::LoadModelIntoVAO(std::string& fileName, bool bIsDynamicBuffer,
+    sMesh* VAOManager::LoadModelIntoVAO(const std::string& fileName, bool bIsDynamicBuffer,
                                         bool hasNormals, bool hasTexture)
     {
         // Load the model from file
@@ -62,7 +62,7 @@ namespace MyEngine
         return pMesh;
     }
 
-    sMesh* VAOManager::LoadModelCopyIntoVAO(std::string& fileName, bool bIsDynamicBuffer, bool hasNormals, bool hasTexture, std::string& copyName)
+    sMesh* VAOManager::LoadModelCopyIntoVAO(const std::string& fileName, bool bIsDynamicBuffer, bool hasNormals, bool hasTexture, std::string& copyName)
     {
         // Load original first
         sMesh* pMesh = LoadModelIntoVAO(fileName, bIsDynamicBuffer,
@@ -79,7 +79,7 @@ namespace MyEngine
         return pMesh;
     }
 
-    sMesh* VAOManager::LoadModelIntoVAO(std::string& fileName,
+    sMesh* VAOManager::LoadModelIntoVAO(const std::string& fileName,
                                         bool bIsDynamicBuffer /*=false*/)
 
     {
@@ -87,7 +87,7 @@ namespace MyEngine
     }
 
     // We don't want to return an int, likely
-    sMesh* VAOManager::FindMeshByModelName(std::string& filename)
+    sMesh* VAOManager::FindMeshByModelName(const std::string& filename)
     {
         std::map< std::string /*model name*/,
             sMesh* /* info needed to draw*/ >::iterator
@@ -215,7 +215,7 @@ namespace MyEngine
         }
     }
 
-    bool VAOManager::UpdateVAOBuffers(std::string& fileName, sMesh* pUpdatedMesh)
+    bool VAOManager::UpdateVAOBuffers(const std::string& fileName, sMesh* pUpdatedMesh)
     {
         // This exists? 
         if (!FindMeshByModelName(fileName))

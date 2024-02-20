@@ -54,6 +54,10 @@ namespace MyEngine
         }
     }
 
+    void ParticleUpdaterSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void ParticleUpdaterSystem::Render(Scene* pScene)
     {
     }

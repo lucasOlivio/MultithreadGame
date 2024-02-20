@@ -36,6 +36,10 @@ namespace MyEngine
 	{
 	}
 
+	void InputSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+	{
+	}
+
 	void InputSystem::Render(Scene* pScene)
 	{
 	}

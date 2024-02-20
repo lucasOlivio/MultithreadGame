@@ -62,6 +62,10 @@ namespace MyEngine
     {
     }
 
+    void WindowSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void WindowSystem::Render(Scene* pScene)
     {
         WindowComponent* pWindow = GraphicsLocator::GetWindow();

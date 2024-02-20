@@ -24,6 +24,8 @@ namespace MyEngine
         // entityId = Entity to duplicate the components from
         Entity CreateEntity(Entity entityId);
 
+        size_t GetNumberEntities();
+
         // Flag entity to be deleted later on a safer time
         void RemoveEntity(Entity entityId);
 
@@ -69,6 +71,8 @@ namespace MyEngine
 
             return pComponent;
         }
+
+        bool HasComponents(Entity entityId, const EntityMask& componentMask);
 
         // Get an entity component using the BiMap and ComponentPool
         template<typename T>

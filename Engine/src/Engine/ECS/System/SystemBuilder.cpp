@@ -55,29 +55,9 @@ namespace MyEngine
         {"ShaderSystem", []() { return new ShaderSystem; }},
         {"ModelRenderSystem", []() { return new ModelRenderSystem; }},
         {"RenderSystem", []() { return new RenderSystem; }},
-        {"LightSystem", []() { return new LightSystem; }},
-        {"AnimationSystem", []() { return new AnimationSystem; }},
-        {"AnimationPlayerSystem", []() { return new AnimationPlayerSystem; }},
-        {"ParticleEmissionSystem", []() { return new ParticleEmissionSystem; }},
-        {"ParticleUpdaterSystem", []() { return new ParticleUpdaterSystem; }},
-        {"ParticleRenderSystem", []() { return new ParticleRenderSystem; }},
         {"FrameBufferSystem", []() { return new FrameBufferSystem; }},
         // Physics systems
-        {"MovementSystem", []() { return new MovementSystem; }},
-        {"RotationSystem", []() { return new RotationSystem; }},
-        {"GravitySystem", []() { return new GravitySystem; }},
-        {"GridBroadPhaseSystem", []() { return new GridBroadPhaseSystem; }},
-        {"CollisionSystem", []() { return new CollisionSystem; }},
-        {"SotBodyConstraintsSystem", []() { return new SotBodyConstraintsSystem; }},
-        {"SoftBodyUpdateSystem", []() { return new SoftBodyUpdateSystem; }},
-        {"SoftBodyResponseSystem", []() { return new SoftBodyResponseSystem; }},
-        // Gameplay
-        {"SteeringBehaviorSystem", []() { return new SteeringBehaviorSystem; }},
-        // Debug Systems
-        {"DebugSystem", []() { return new DebugSystem; }},
-        {"DrawGridSystem", []() { return new DrawGridSystem; }},
-        {"DrawCollisionSystem", []() { return new DrawCollisionSystem; }},
-        {"DrawSoftBodyPartclesSystem", []() { return new DrawSoftBodyPartclesSystem; }},
+        {"MovementSystem", []() { return new MovementSystem; }}
     };
 
     void SystemBuilder::RegisterSystem(const std::string& name, SystemFactory factory)

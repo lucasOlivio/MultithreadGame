@@ -272,6 +272,7 @@ namespace MyEngine
     {
         float deltaTime = GetDeltaTime();
 
+        // TODO: Go through all entities and update
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
             m_vecSystems[i]->Update(m_pCurrentScene, deltaTime);
@@ -284,6 +285,7 @@ namespace MyEngine
     {
         m_BeginFrame();
 
+        // TODO: Go through all entities and render
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
             m_vecSystems[i]->Render(m_pCurrentScene);
@@ -388,6 +390,22 @@ namespace MyEngine
     void Engine::OnWindowClose(const WindowCloseEvent& event)
     {
         m_isRunning = false;
+    }
+
+    void Engine::m_UpdateEntity(Entity entityId, float deltaTime)
+    {
+        for (int i = 0; i < m_vecSystems.size(); i++)
+        {
+            m_vecSystems[i]->Update(m_pCurrentScene, entityId, deltaTime);
+        }
+    }
+
+    void Engine::m_RenderEntity(Entity entityId)
+    {
+        for (int i = 0; i < m_vecSystems.size(); i++)
+        {
+            m_vecSystems[i]->Render(m_pCurrentScene);
+        }
     }
 
     void Engine::m_ClearFrame()

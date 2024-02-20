@@ -24,6 +24,8 @@ namespace MyEngine
 
 		virtual void Update(Scene* pScene, float deltaTime);
 
+		virtual void Update(Scene* pScene, Entity entityId, float deltaTime);
+
 		virtual void Render(Scene* pScene);
 
 		virtual void End(Scene* pScene);

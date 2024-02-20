@@ -25,6 +25,10 @@ namespace MyEngine
 	{
 	}
 
+	void DrawCollisionSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+	{
+	}
+
 	void DrawCollisionSystem::Render(Scene* pScene)
 	{
 		iRendererManager* pRendererManager = RendererManagerLocator::Get();

@@ -28,6 +28,21 @@ namespace MyEngine
         }
     }
 
+    void GravitySystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+        EntityMask mask = SceneView<MovementComponent, GravityComponent>::GetMask(*pScene);
+
+        if (!pScene->HasComponents(entityId, mask))
+        {
+            return;
+        }
+
+        MovementComponent* pMovement = pScene->Get<MovementComponent>(entityId);
+        GravityComponent* pGravity = pScene->Get<GravityComponent>(entityId);
+
+        pMovement->velocity = pMovement->velocity + (pGravity->acceleration * deltaTime);
+    }
+
     void GravitySystem::Render(Scene* pScene)
     {
     }

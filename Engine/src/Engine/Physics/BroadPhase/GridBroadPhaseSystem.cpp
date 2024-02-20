@@ -109,6 +109,10 @@ namespace MyEngine
 		}
 	}
 
+	void GridBroadPhaseSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+	{
+	}
+
 	void GridBroadPhaseSystem::Render(Scene* pScene)
 	{
 	}

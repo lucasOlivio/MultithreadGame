@@ -29,6 +29,10 @@ namespace MyEngine
 		pState->prevState = pState->currState;
 	}
 
+	void StateSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+	{
+	}
+
 	void StateSystem::Render(Scene* pScene)
 	{
 	}

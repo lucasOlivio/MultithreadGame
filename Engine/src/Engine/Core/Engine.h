@@ -38,6 +38,8 @@ namespace MyEngine
 
 		float GetDeltaTime();
 
+		Scene* GetCurrentScene();
+
 		// Systems that will manipulate components and handle the scene in some way,
 		// the system is added and initialized, if the scene is passed the system is also started
 		virtual void AddSystem(std::string systemName, Scene* pScene = nullptr);
@@ -106,6 +108,12 @@ namespace MyEngine
 		std::vector<float> m_frameTimes;
 
 		bool m_isRunning;
+
+		// Goes through all systems updating this entity
+		void m_UpdateEntity(Entity entityId, float deltaTime);
+
+		// Render entity using all rendering systems
+		void m_RenderEntity(Entity entityId);
 
 		// Any major clears needed to be done at end of frame (Ex: scene deleting, entity delete)
 		virtual void m_ClearFrame();

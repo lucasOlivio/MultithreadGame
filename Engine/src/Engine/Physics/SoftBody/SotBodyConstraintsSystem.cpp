@@ -156,6 +156,10 @@ namespace MyEngine
         }
     }
 
+    void SotBodyConstraintsSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void SotBodyConstraintsSystem::Render(Scene* pScene)
     {
     }

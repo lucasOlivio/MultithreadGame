@@ -21,6 +21,8 @@ namespace MyEngine
 
 		virtual void Update(Scene* pScene, float deltaTime);
 
+		virtual void Update(Scene* pScene, Entity entityId, float deltaTime);
+
 		virtual void Render(Scene* pScene);
 
 		virtual void End(Scene* pScene);
@@ -28,10 +30,5 @@ namespace MyEngine
 		virtual void Shutdown();
 
 		static void InputTriggered(const KeyboardEvent& event);
-
-	private:
-		void m_InitiateMouseCapture();
-
-		void m_StopMouseCapture();
 	};
 }

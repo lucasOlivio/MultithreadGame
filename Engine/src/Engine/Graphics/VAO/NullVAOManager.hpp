@@ -16,7 +16,7 @@ namespace MyEngine
 			LOG_ERROR("VAOManager not set!");
 		}
 
-		virtual sMesh* LoadModelIntoVAO(std::string& fileName, bool bIsDynamicBuffer,
+		virtual sMesh* LoadModelIntoVAO(const std::string& fileName, bool bIsDynamicBuffer,
 										bool hasNormals, bool hasTexture)
 		{
 			LOG_ERROR("VAOManager not set!");
@@ -24,27 +24,27 @@ namespace MyEngine
 		}
 
 		// Normals and texture as default
-		virtual sMesh* LoadModelIntoVAO(std::string& fileName, bool bIsDynamicBuffer)
+		virtual sMesh* LoadModelIntoVAO(const std::string& fileName, bool bIsDynamicBuffer)
 		{
 			LOG_ERROR("VAOManager not set!");
 			return nullptr;
 		}
 
 		// Load mesh and duplicates it with custom name
-		virtual sMesh* LoadModelCopyIntoVAO(std::string& fileName, bool bIsDynamicBuffer,
+		virtual sMesh* LoadModelCopyIntoVAO(const std::string& fileName, bool bIsDynamicBuffer,
 											bool hasNormals, bool hasTexture, std::string& copyName)
 		{
 			LOG_ERROR("VAOManager not set!");
 			return nullptr;
 		}
 
-		virtual bool UpdateVAOBuffers(std::string& fileName, sMesh* pUpdatedMesh)
+		virtual bool UpdateVAOBuffers(const std::string& fileName, sMesh* pUpdatedMesh)
 		{
 			LOG_ERROR("VAOManager not set!");
 			return false;
 		}
 
-		virtual sMesh* FindMeshByModelName(std::string& filename)
+		virtual sMesh* FindMeshByModelName(const std::string& filename)
 		{
 			LOG_ERROR("VAOManager not set!");
 			return nullptr;

@@ -41,6 +41,10 @@ namespace MyEngine
     {
     }
 
+    void CoreSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void CoreSystem::Render(Scene* pScene)
     {
     }

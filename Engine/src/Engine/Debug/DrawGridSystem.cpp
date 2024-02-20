@@ -32,6 +32,10 @@ namespace MyEngine
 	{
 	}
 
+	void DrawGridSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+	{
+	}
+
 	void DrawGridSystem::Render(Scene* pScene)
 	{
 		iRendererManager* pRendererManager = RendererManagerLocator::Get();

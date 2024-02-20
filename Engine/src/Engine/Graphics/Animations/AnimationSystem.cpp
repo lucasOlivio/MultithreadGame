@@ -46,6 +46,33 @@ namespace MyEngine
         }
     }
 
+    void AnimationSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+        EntityMask mask = SceneView<TransformComponent, TransformAnimationComponent>::GetMask(*pScene);
+
+        if (!pScene->HasComponents(entityId, mask))
+        {
+            return;
+        }
+
+        TransformComponent* pTransform = pScene->Get<TransformComponent>(entityId);
+        TransformAnimationComponent* pAnimation = pScene->Get<TransformAnimationComponent>(entityId);
+
+        float currTime = pAnimation->time;
+
+        // Position
+        AnimationUtils::InterpolateAndApply<PositionKeyFrame, glm::vec3>(pAnimation->positionKeyFrames,
+            currTime, pAnimation->currStartPosKF, pAnimation->currEndPosKF, pTransform->position);
+
+        // Rotation
+        AnimationUtils::InterpolateAndApply<RotationKeyFrame, glm::quat>(pAnimation->rotationKeyFrames,
+            currTime, pAnimation->currStartRotKF, pAnimation->currEndRotKF, pTransform->orientation);
+
+        // Scale
+        AnimationUtils::InterpolateAndApply<ScaleKeyFrame, float>(pAnimation->scaleKeyFrames,
+            currTime, pAnimation->currStartScaKF, pAnimation->currEndScaKF, pTransform->scale);
+    }
+
     void AnimationSystem::Render(Scene* pScene)
     {
     }

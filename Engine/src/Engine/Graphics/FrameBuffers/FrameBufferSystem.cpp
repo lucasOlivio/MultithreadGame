@@ -34,6 +34,10 @@ namespace MyEngine
 	{
 	}
 
+	void FrameBufferSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+	{
+	}
+
 	void FrameBufferSystem::Render(Scene* pScene)
 	{
 	}

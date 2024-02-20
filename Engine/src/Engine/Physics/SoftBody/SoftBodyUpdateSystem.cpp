@@ -103,6 +103,10 @@ namespace MyEngine
         }
     }
 
+    void SoftBodyUpdateSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void SoftBodyUpdateSystem::Render(Scene* pScene)
     {
     }

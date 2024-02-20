@@ -37,9 +37,17 @@ namespace MyEngine
 			WindowComponent* pWindow = GraphicsLocator::GetWindow();
 			pWindow->name = std::to_string(pFrame->fps);
 
+			// HACK: Seeing how many entities we have
+			size_t numEntities = pScene->GetNumberEntities();
+			pWindow->name += " | " + std::to_string(numEntities);
+
 			pFrame->frameCount = 0;
 			pFrame->fpsTimer = 0.0f;
 		}
+	}
+
+	void WindowFrameSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+	{
 	}
 
 	void WindowFrameSystem::Render(Scene* pScene)

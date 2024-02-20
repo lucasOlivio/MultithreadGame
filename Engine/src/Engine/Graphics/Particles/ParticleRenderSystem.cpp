@@ -22,6 +22,10 @@ namespace MyEngine
     {
     }
 
+    void ParticleRenderSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void ParticleRenderSystem::Render(Scene* pScene)
     {
         iParticleManager* pParticleManager = ParticleManagerLocator::Get();

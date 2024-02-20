@@ -23,10 +23,7 @@ namespace MyEngine
             }
             else
             {
-                // Unpack the template parameters into an initializer list
-                int componentIds[] = { 0, scene.GetComponentType<ComponentTypes>() ... };
-                for (int i = 1; i < (sizeof...(ComponentTypes) + 1); i++)
-                    m_mask.set(componentIds[i]);
+                m_mask = GetMask(scene);
             }
         }
 
@@ -92,6 +89,17 @@ namespace MyEngine
         {
             // Give an iterator to the end of this view 
             return Iterator(m_pEntityManager, m_pEntityManager->GetEntities().size(), m_mask, m_all);
+        }
+        
+        static EntityMask GetMask(Scene& scene)
+        {
+            EntityMask mask = EntityMask();
+            // Unpack the template parameters into an initializer list
+            int componentIds[] = { 0, scene.GetComponentType<ComponentTypes>() ... };
+            for (int i = 1; i < (sizeof...(ComponentTypes) + 1); i++)
+                mask.set(componentIds[i]);
+
+            return mask;
         }
 
     protected:

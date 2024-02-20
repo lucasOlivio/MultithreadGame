@@ -138,10 +138,20 @@ namespace MyEngine
         return Entity();
     }
 
+    size_t Scene::GetNumberEntities()
+    {
+        return m_pEntityManager->Size();
+    }
+
     void Scene::RemoveEntity(Entity entityId)
     {
         // TODO: Critical section for vec componentsToDestroy
         m_entitiesToDestroy.insert(entityId);
+    }
+
+    bool Scene::HasComponents(Entity entityId, const EntityMask& componentMask)
+    {
+        return m_pEntityManager->HasComponents(entityId, componentMask);
     }
 
     void Scene::RemoveComponent(Entity entityId, ComponentType componentType)

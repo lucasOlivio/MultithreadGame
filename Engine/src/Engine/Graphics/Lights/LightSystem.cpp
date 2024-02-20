@@ -43,6 +43,28 @@ namespace MyEngine
         }
     }
 
+    void LightSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+        EntityMask mask = SceneView<TransformComponent, LightComponent>::GetMask(*pScene);
+
+        if (!pScene->HasComponents(entityId, mask))
+        {
+            return;
+        }
+
+        iShaderProgram* pShader = ShaderManager::GetActiveShader();
+        LightComponent* pLight = pScene->Get<LightComponent>(entityId);
+        TransformComponent* pTransform = pScene->Get<TransformComponent>(entityId);
+
+        m_UpdatePositionUL(pTransform, pLight, pShader);
+        m_UpdateDirectionUL(pLight, pShader);
+        m_UpdateDiffuseUL(pLight, pShader);
+        m_UpdateSpecularUL(pLight, pShader);
+        m_UpdateAttenUL(pLight, pShader);
+        m_UpdateParamsUL(pLight, pShader);
+        m_UpdateStatusUL(pLight, pShader);
+    }
+
     void LightSystem::End(Scene* pScene)
     {
         // Reset all lights in shader with new empty components

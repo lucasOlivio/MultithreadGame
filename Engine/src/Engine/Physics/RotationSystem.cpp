@@ -46,6 +46,37 @@ namespace MyEngine
         }
     }
 
+    void RotationSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+        EntityMask mask = SceneView<TransformComponent>::GetMask(*pScene);
+
+        if (!pScene->HasComponents(entityId, mask))
+        {
+            return;
+        }
+
+        TransformComponent* pTransform = pScene->Get<TransformComponent>(entityId);
+        RotationComponent* pRotation = pScene->Get<RotationComponent>(entityId);
+
+        glm::vec3 newVelocity = pRotation->velocity + (pRotation->acceleration * deltaTime);
+        glm::vec3 dragForce = newVelocity * -(pRotation->drag * deltaTime);
+        pRotation->velocity = newVelocity + dragForce;
+
+        // Clip velocity between min and max
+        if (pRotation->velocity.length() <= 0.5f || pRotation->maxSpeed == 0.0f)
+        {
+            pRotation->velocity = glm::vec3(0.0f);
+        }
+        else if (pRotation->velocity.length() > pRotation->maxSpeed)
+        {
+            pRotation->velocity = glm::normalize(pRotation->velocity) * pRotation->maxSpeed;
+        }
+
+        glm::vec3 deltaRotation = pRotation->velocity * deltaTime;
+
+        pTransform->orientation = TransformUtils::AdjustOrientation(pTransform->orientation, deltaRotation);
+    }
+
     void RotationSystem::Render(Scene* pScene)
     {
     }

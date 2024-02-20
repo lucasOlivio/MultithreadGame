@@ -92,6 +92,10 @@ namespace MyEngine
         }
     }
 
+    void SteeringBehaviorSystem::Update(Scene* pScene, Entity entityId, float deltaTime)
+    {
+    }
+
     void SteeringBehaviorSystem::Render(Scene* pScene)
     {
     }
