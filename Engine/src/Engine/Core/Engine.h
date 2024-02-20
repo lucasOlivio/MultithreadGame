@@ -19,15 +19,10 @@
 #include "Engine/Graphics/Textures/iTextureManager.h"
 #include "Engine/Graphics/FrameBuffers/iFrameBufferManager.h"
 
-#include <map>
+#include <vector>
 
 namespace MyEngine
 {
-	// Thread setup
-	unsigned __stdcall UpdateThread(void* param);
-
-	unsigned __stdcall RenderThread(void* param);
-
 	// App should inherit from this class to setup and run everything needed
 	class Engine
 	{
@@ -36,8 +31,6 @@ namespace MyEngine
 		virtual ~Engine();
 
 		float GetDeltaTime();
-
-		Scene* GetCurrentScene();
 
 		// Systems that will manipulate components and handle the scene in some way,
 		// the system is added and initialized, if the scene is passed the system is also started
@@ -107,11 +100,15 @@ namespace MyEngine
 
 		bool m_isRunning;
 
+		// Multithread support
+		int m_numThreadsUpdate;
+		int m_numThreadsRender;
+
 		// Goes through all systems updating this entity
-		void m_UpdateEntity(Entity entityId, float deltaTime);
+		void m_UpdateEntity(const Entity& entityId, const float& deltaTime);
 
 		// Render entity using all rendering systems
-		void m_RenderEntity(Entity entityId);
+		void m_RenderEntity(const Entity& entityId);
 
 		// Any major clears needed to be done at end of frame (Ex: scene deleting, entity delete)
 		virtual void m_ClearFrame();

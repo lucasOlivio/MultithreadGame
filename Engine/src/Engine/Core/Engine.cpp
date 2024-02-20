@@ -35,24 +35,72 @@ namespace MyEngine
     using itSystems = std::map<std::string, iSystem*>::iterator;
     using pairSystems = std::pair<std::string, iSystem*>;
 
-    unsigned __stdcall UpdateThread(void* param) 
-    {
-        Engine* pEngine = static_cast<Engine*>(param);
-        pEngine->Update();
-
-        return 0;
-    }
-
-    unsigned __stdcall RenderThread(void* param) 
-    {
-        Engine* pEngine = static_cast<Engine*>(param);
-        pEngine->Render();
-
-        return 0;
-    }
-
     Engine::Engine()
     {
+        m_numThreadsUpdate = 0;
+        m_numThreadsRender = 0;
+
+        // Setting up events
+        m_pEventBusWindow = new EventBus<eWindowEvents, WindowCloseEvent>();
+        EventBusLocator<eWindowEvents, WindowCloseEvent>::Set(m_pEventBusWindow);
+
+        m_pEventBusRigidCollision = new EventBus<eCollisionEvents, RigidBodyCollisionEvent>();
+        EventBusLocator<eCollisionEvents, RigidBodyCollisionEvent>::Set(m_pEventBusRigidCollision);
+
+        m_pEventBusSoftCollision = new EventBus<eCollisionEvents, SoftBodyCollisionEvent>();
+        EventBusLocator<eCollisionEvents, SoftBodyCollisionEvent>::Set(m_pEventBusSoftCollision);
+
+        m_pEventBusKeyboard = new EventBus<eInputEvents, KeyboardEvent>();
+        EventBusLocator<eInputEvents, KeyboardEvent>::Set(m_pEventBusKeyboard);
+
+        m_pEventBusMouse = new EventBus<eInputEvents, MouseEvent>();
+        EventBusLocator<eInputEvents, MouseEvent>::Set(m_pEventBusMouse);
+
+        m_pEventBusSceneChange = new EventBus<eSceneEvents, SceneChangeEvent>();
+        EventBusLocator<eSceneEvents, SceneChangeEvent>::Set(m_pEventBusSceneChange);
+
+        m_pEventBusStartedState = new EventBus<eGameStateEvents, GameStartedEvent>();
+        EventBusLocator<eGameStateEvents, GameStartedEvent>::Set(m_pEventBusStartedState);
+
+        m_pEventBusStoppedState = new EventBus<eGameStateEvents, GameStoppedEvent>();
+        EventBusLocator<eGameStateEvents, GameStoppedEvent>::Set(m_pEventBusStoppedState);
+
+        m_pEventBusRunningState = new EventBus<eGameStateEvents, GameRunningEvent>();
+        EventBusLocator<eGameStateEvents, GameRunningEvent>::Set(m_pEventBusRunningState);
+
+        m_pEventBusGameOverState = new EventBus<eGameStateEvents, GameOverEvent>();
+        EventBusLocator<eGameStateEvents, GameOverEvent>::Set(m_pEventBusGameOverState);
+
+        m_pEventBusPosKeyFrame = new EventBus<eAnimationEvents, PositionKeyFrameEvent>();
+        EventBusLocator<eAnimationEvents, PositionKeyFrameEvent>::Set(m_pEventBusPosKeyFrame);
+
+        m_pEventBusRotKeyFrame = new EventBus<eAnimationEvents, RotationKeyFrameEvent>();
+        EventBusLocator<eAnimationEvents, RotationKeyFrameEvent>::Set(m_pEventBusRotKeyFrame);
+
+        m_pEventBusScaleKeyFrame = new EventBus<eAnimationEvents, ScaleKeyFrameEvent>();
+        EventBusLocator<eAnimationEvents, ScaleKeyFrameEvent>::Set(m_pEventBusScaleKeyFrame);
+
+        // Setting up resources managers
+        m_pSceneManager = new SceneManager();
+        SceneManagerLocator::Set(m_pSceneManager);
+
+        m_pVAOManager = new VAOManager();
+        VAOManagerLocator::Set(m_pVAOManager);
+
+        m_pShaderManager = new ShaderManager();
+        ShaderManagerLocator::Set(m_pShaderManager);
+
+        m_pMaterialManager = new MaterialManager();
+        MaterialManagerLocator::Set(m_pMaterialManager);
+
+        m_pTextureManager = new cBasicTextureManager();
+        TextureManagerLocator::Set(m_pTextureManager);
+
+        m_pRendererManager = new RendererManager();
+        RendererManagerLocator::Set(m_pRendererManager);
+
+        m_pFrameBufferManager = new FrameBufferManager();
+        FrameBufferManagerLocator::Set(m_pFrameBufferManager);
     }
 
     Engine::~Engine()
@@ -160,68 +208,6 @@ namespace MyEngine
     {
         LoadConfigurations();
 
-        // Setting up events
-        m_pEventBusWindow = new EventBus<eWindowEvents, WindowCloseEvent>();
-        EventBusLocator<eWindowEvents, WindowCloseEvent>::Set(m_pEventBusWindow);
-
-        m_pEventBusRigidCollision = new EventBus<eCollisionEvents, RigidBodyCollisionEvent>();
-        EventBusLocator<eCollisionEvents, RigidBodyCollisionEvent>::Set(m_pEventBusRigidCollision);
-
-        m_pEventBusSoftCollision = new EventBus<eCollisionEvents, SoftBodyCollisionEvent>();
-        EventBusLocator<eCollisionEvents, SoftBodyCollisionEvent>::Set(m_pEventBusSoftCollision);
-
-        m_pEventBusKeyboard = new EventBus<eInputEvents, KeyboardEvent>();
-        EventBusLocator<eInputEvents, KeyboardEvent>::Set(m_pEventBusKeyboard);
-
-        m_pEventBusMouse = new EventBus<eInputEvents, MouseEvent>();
-        EventBusLocator<eInputEvents, MouseEvent>::Set(m_pEventBusMouse);
-
-        m_pEventBusSceneChange = new EventBus<eSceneEvents, SceneChangeEvent>();
-        EventBusLocator<eSceneEvents, SceneChangeEvent>::Set(m_pEventBusSceneChange);
-
-        m_pEventBusStartedState = new EventBus<eGameStateEvents, GameStartedEvent>();
-        EventBusLocator<eGameStateEvents, GameStartedEvent>::Set(m_pEventBusStartedState);
-
-        m_pEventBusStoppedState = new EventBus<eGameStateEvents, GameStoppedEvent>();
-        EventBusLocator<eGameStateEvents, GameStoppedEvent>::Set(m_pEventBusStoppedState);
-
-        m_pEventBusRunningState = new EventBus<eGameStateEvents, GameRunningEvent>();
-        EventBusLocator<eGameStateEvents, GameRunningEvent>::Set(m_pEventBusRunningState);
-
-        m_pEventBusGameOverState = new EventBus<eGameStateEvents, GameOverEvent>();
-        EventBusLocator<eGameStateEvents, GameOverEvent>::Set(m_pEventBusGameOverState);
-
-        m_pEventBusPosKeyFrame = new EventBus<eAnimationEvents, PositionKeyFrameEvent>();
-        EventBusLocator<eAnimationEvents, PositionKeyFrameEvent>::Set(m_pEventBusPosKeyFrame);
-
-        m_pEventBusRotKeyFrame = new EventBus<eAnimationEvents, RotationKeyFrameEvent>();
-        EventBusLocator<eAnimationEvents, RotationKeyFrameEvent>::Set(m_pEventBusRotKeyFrame);
-
-        m_pEventBusScaleKeyFrame = new EventBus<eAnimationEvents, ScaleKeyFrameEvent>();
-        EventBusLocator<eAnimationEvents, ScaleKeyFrameEvent>::Set(m_pEventBusScaleKeyFrame);
-
-        // Setting up resources managers
-        m_pSceneManager = new SceneManager();
-        SceneManagerLocator::Set(m_pSceneManager);
-
-        m_pVAOManager = new VAOManager();
-        VAOManagerLocator::Set(m_pVAOManager);
-
-        m_pShaderManager = new ShaderManager();
-        ShaderManagerLocator::Set(m_pShaderManager);
-
-        m_pMaterialManager = new MaterialManager();
-        MaterialManagerLocator::Set(m_pMaterialManager);
-
-        m_pTextureManager = new cBasicTextureManager();
-        TextureManagerLocator::Set(m_pTextureManager);
-
-        m_pRendererManager = new RendererManager();
-        RendererManagerLocator::Set(m_pRendererManager);
-
-        m_pFrameBufferManager = new FrameBufferManager();
-        FrameBufferManagerLocator::Set(m_pFrameBufferManager);
-
         // Global events of engine interest
         m_pEventBusSceneChange->Subscribe(eSceneEvents::CHANGE, [this](const SceneChangeEvent& event) { OnSceneChange(event); });
         m_pEventBusWindow->Subscribe(eWindowEvents::WINDOW_CLOSE, [this](const WindowCloseEvent& event) { OnWindowClose(event); });
@@ -270,10 +256,13 @@ namespace MyEngine
         // Systems update by entity
         for (Entity entityId : m_pCurrentScene->GetEntitymanager()->GetEntities())
         {
-            for (int i = 0; i < m_vecSystems.size(); i++)
-            {
-                m_vecSystems[i]->Update(m_pCurrentScene, entityId, deltaTime);
-            }
+            m_UpdateEntity(entityId, deltaTime);
+        }
+
+        // Wait all entities threads to finish
+        while (m_numThreadsUpdate > 0)
+        {
+            Sleep(0);
         }
 
         // General Systems updates not related to entity
@@ -292,10 +281,13 @@ namespace MyEngine
         // Systems render by entity
         for (Entity entityId : m_pCurrentScene->GetEntitymanager()->GetEntities())
         {
-            for (int i = 0; i < m_vecSystems.size(); i++)
-            {
-                m_vecSystems[i]->Render(m_pCurrentScene, entityId);
-            }
+            m_RenderEntity(entityId);
+        }
+
+        // Wait all entities threads to finish
+        while (m_numThreadsRender > 0)
+        {
+            Sleep(0);
         }
 
         // General Systems rendering not related to entity
@@ -404,20 +396,36 @@ namespace MyEngine
         m_isRunning = false;
     }
 
-    void Engine::m_UpdateEntity(Entity entityId, float deltaTime)
+    void Engine::m_UpdateEntity(const Entity& entityId, const float& deltaTime)
     {
+        m_numThreadsUpdate++;
+
+        m_pCurrentScene->EnterEntityCS(entityId);
+
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
             m_vecSystems[i]->Update(m_pCurrentScene, entityId, deltaTime);
         }
+
+        m_pCurrentScene->LeaveEntityCS(entityId);
+
+        m_numThreadsUpdate--;
     }
 
-    void Engine::m_RenderEntity(Entity entityId)
+    void Engine::m_RenderEntity(const Entity& entityId)
     {
+        m_numThreadsRender++;
+
+        m_pCurrentScene->EnterEntityCS(entityId);
+
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
-            m_vecSystems[i]->Render(m_pCurrentScene);
+            m_vecSystems[i]->Render(m_pCurrentScene, entityId);
         }
+
+        m_pCurrentScene->LeaveEntityCS(entityId);
+
+        m_numThreadsRender--;
     }
 
     void Engine::m_ClearFrame()

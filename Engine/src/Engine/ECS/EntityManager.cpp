@@ -11,6 +11,8 @@ namespace MyEngine
         for (Entity entityId = 0; entityId < MAX_ENTITIES; ++entityId) {
             m_availableEntities.push(entityId);
         }
+
+        m_entitiesCS.reserve(MAX_ENTITIES);
     }
 
     Entity EntityManager::AddEntity(EntityMask initialMask)
@@ -26,6 +28,8 @@ namespace MyEngine
 
         m_masks[entityId] = initialMask;
         m_liveEntities.push_back(entityId);
+
+        InitializeCriticalSection(&m_entitiesCS[entityId]);
 
         return entityId;
     }
@@ -44,6 +48,18 @@ namespace MyEngine
         // Reset mask for removed entity and decrease count
         m_masks[entityId].reset();
         m_availableEntities.push(entityId);
+
+        DeleteCriticalSection(&m_entitiesCS[entityId]);
+    }
+
+    void EntityManager::EnterEntityCS(Entity entityId)
+    {
+        EnterCriticalSection(&m_entitiesCS[entityId]);
+    }
+
+    void EntityManager::LeaveEntityCS(Entity entityId)
+    {
+        LeaveCriticalSection(&m_entitiesCS[entityId]);
     }
 
     void EntityManager::SetComponent(Entity entityId, ComponentType componentType)

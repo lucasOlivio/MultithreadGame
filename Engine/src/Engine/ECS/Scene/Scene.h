@@ -24,6 +24,9 @@ namespace MyEngine
         // entityId = Entity to duplicate the components from
         Entity CreateEntity(Entity entityId);
 
+        void EnterEntityCS(Entity entityId);
+        void LeaveEntityCS(Entity entityId);
+
         size_t GetNumberEntities();
 
         // Flag entity to be deleted later on a safer time

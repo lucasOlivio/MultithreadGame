@@ -133,6 +133,16 @@ namespace MyEngine
         return Entity();
     }
 
+    void Scene::EnterEntityCS(Entity entityId)
+    {
+        m_pEntityManager->EnterEntityCS(entityId);
+    }
+
+    void Scene::LeaveEntityCS(Entity entityId)
+    {
+        m_pEntityManager->LeaveEntityCS(entityId);
+    }
+
     size_t Scene::GetNumberEntities()
     {
         return m_pEntityManager->Size();

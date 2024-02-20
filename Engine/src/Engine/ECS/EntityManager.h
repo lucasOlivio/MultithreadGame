@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Base.h"
+
 #include <queue>
 #include <vector>
+#include <Windows.h>
 
 namespace MyEngine
 {
@@ -15,6 +17,9 @@ namespace MyEngine
         Entity AddEntity(EntityMask initialMask);
 
         void RemoveEntity(Entity entityId);
+
+        void EnterEntityCS(Entity entityId);
+        void LeaveEntityCS(Entity entityId);
 
         void SetComponent(Entity entityId, ComponentType componentType);
 
@@ -39,5 +44,8 @@ namespace MyEngine
         std::queue<Entity> m_availableEntities;
         std::vector<Entity> m_liveEntities;
         EntityMask m_masks[MAX_ENTITIES];
+
+        // Thread safe entities
+        std::vector<CRITICAL_SECTION> m_entitiesCS;
     };
 }

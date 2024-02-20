@@ -153,23 +153,26 @@ namespace MyEngine
             glm::vec3 playerFront = glm::normalize(TransformUtils::GetForwardVector(pTransform->orientation));
 
             std::vector<glm::vec3> directions = {
-                glm::vec3(0.0f, 10.0f, 10.0f),    // top
-                glm::vec3(10.0f, 10.0f, 10.0f),    // top-right
-                glm::vec3(-10.0f, 10.0f, 10.0f),   // top-left
-                glm::vec3(0.0f, -10.0f, 10.0f),   // down
-                glm::vec3(10.0f, -10.0f, 10.0f),   // down-right
-                glm::vec3(-10.0f, -10.0f, 10.0f),  // down-left
-                glm::vec3(10.0f, 0.0f, 10.0f),    // Right
-                glm::vec3(-10.0f, 0.0f, 10.0f),   // Left
+                glm::vec3(0.0f, 5.0f, 5.0f),    // top
+                glm::vec3(5.0f, 5.0f, 5.0f),    // top-right
+                glm::vec3(-5.0f, 5.0f, 5.0f),   // top-left
+                glm::vec3(0.0f, -5.0f, 5.0f),   // down
+                glm::vec3(5.0f, -5.0f, 5.0f),   // down-right
+                glm::vec3(-5.0f, -5.0f, 5.0f),  // down-left
+                glm::vec3(5.0f, 0.0f, 5.0f),    // Right
+                glm::vec3(-5.0f, 0.0f, 5.0f),   // Left
             };
 
             // Fire bullets from each direction
             for (const glm::vec3& direction : directions) 
             {
-                glm::vec3 bulletPosition = pTransform->position + (playerFront + direction);
-                GameplayUtils::CreateBullet(BULLET_RADIUS, bulletPosition,
-                    BULLET_VELOCITY, BULLET_ACCELERATION,
-                    pScene);
+                for (int i = 1; i < 15; i++)
+                {
+                    glm::vec3 bulletPosition = pTransform->position + (playerFront + (direction * static_cast<float>(i)));
+                    GameplayUtils::CreateBullet(BULLET_RADIUS, bulletPosition,
+                        BULLET_VELOCITY, BULLET_ACCELERATION,
+                        pScene);
+                }
             }
         }
     }
