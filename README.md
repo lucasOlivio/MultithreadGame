@@ -15,3 +15,8 @@ Project for game algorithms and gems class. On this project we are supposed to c
 3. Open and run the solution.
 
 To test the performance without the threads comment the lines 273 and 299 and then uncomment the lines 274 and 300 in Engine.cpp
+
+## How to play
+
+- W/A/S/D move the camera
+- SPACE shoots the balls
