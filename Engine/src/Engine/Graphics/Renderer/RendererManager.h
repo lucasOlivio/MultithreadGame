@@ -4,6 +4,7 @@
 
 #include <map>
 #include <vector>
+#include <Windows.h>
 
 namespace MyEngine
 {
@@ -11,7 +12,7 @@ namespace MyEngine
 	{
 	public:
 		RendererManager();
-		virtual ~RendererManager() {};
+		virtual ~RendererManager();
 
 		// Maps the fbo id and reserve its vector
 		virtual void AddFBO(uint FBOID);
@@ -27,5 +28,7 @@ namespace MyEngine
 
 	private:
 		std::map<uint /* FBOID */, std::vector<sRenderModelInfo>> m_mapRenderInfos;
+
+		CRITICAL_SECTION m_CSRenderInfos;
 	};
 }

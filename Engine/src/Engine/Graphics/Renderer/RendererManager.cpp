@@ -19,6 +19,12 @@ namespace MyEngine
 
 	RendererManager::RendererManager()
 	{
+		InitializeCriticalSection(&m_CSRenderInfos);
+	}
+
+	RendererManager::~RendererManager()
+	{
+		DeleteCriticalSection(&m_CSRenderInfos);
 	}
 
 	void RendererManager::AddFBO(uint FBOID)
@@ -29,9 +35,11 @@ namespace MyEngine
 
 	void RendererManager::AddToRender(uint FBOID, const sRenderModelInfo& renderInfo)
 	{
+		EnterCriticalSection(&m_CSRenderInfos);
 		assert(m_mapRenderInfos.find(FBOID) != m_mapRenderInfos.end() && "FBOID not found in map!");
 
 		m_mapRenderInfos[FBOID].push_back(renderInfo);
+		LeaveCriticalSection(&m_CSRenderInfos);
 	}
 
 	void RendererManager::RenderAllModels(Scene* pScene)

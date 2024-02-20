@@ -153,14 +153,14 @@ namespace MyEngine
             glm::vec3 playerFront = glm::normalize(TransformUtils::GetForwardVector(pTransform->orientation));
 
             std::vector<glm::vec3> directions = {
-                glm::vec3(0.0f, 2.0f, 2.0f),    // top
-                glm::vec3(2.0f, 2.0f, 2.0f),    // top-right
-                glm::vec3(-2.0f, 2.0f, 2.0f),   // top-left
-                glm::vec3(0.0f, -2.0f, 2.0f),   // down
-                glm::vec3(2.0f, -2.0f, 2.0f),   // down-right
-                glm::vec3(-2.0f, -2.0f, 2.0f),  // down-left
-                glm::vec3(2.0f, 0.0f, 2.0f),    // Right
-                glm::vec3(-2.0f, 0.0f, 2.0f),   // Left
+                glm::vec3(0.0f, 10.0f, 10.0f),    // top
+                glm::vec3(10.0f, 10.0f, 10.0f),    // top-right
+                glm::vec3(-10.0f, 10.0f, 10.0f),   // top-left
+                glm::vec3(0.0f, -10.0f, 10.0f),   // down
+                glm::vec3(10.0f, -10.0f, 10.0f),   // down-right
+                glm::vec3(-10.0f, -10.0f, 10.0f),  // down-left
+                glm::vec3(10.0f, 0.0f, 10.0f),    // Right
+                glm::vec3(-10.0f, 0.0f, 10.0f),   // Left
             };
 
             // Fire bullets from each direction
